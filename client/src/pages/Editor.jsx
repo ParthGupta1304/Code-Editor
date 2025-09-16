@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
 import Select from "react-select";
-
 const CodeEditor = () => {
   // State management - explaining each piece:
   const [code, setCode] = useState(
@@ -21,18 +20,15 @@ const CodeEditor = () => {
     { value: "java", label: "Java" },
     { value: "cpp", label: "C++" },
   ];
-
   // Theme options
   const themeOptions = [
     { value: "vs-dark", label: "Dark" },
     { value: "light", label: "Light" },
     { value: "hc-black", label: "High Contrast" },
   ];
-
   // Handle editor mount - this gives us access to the editor instance
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-
     // Configure editor options for better experience
     editor.updateOptions({
       fontSize: 14,
@@ -42,17 +38,14 @@ const CodeEditor = () => {
       automaticLayout: true,
     });
   };
-
   // Run code function - this will send code to backend for execution
   const runCode = async () => {
     if (!code.trim()) {
       setOutput("Error: Please enter some code to run.");
       return;
     }
-
     setIsRunning(true);
     setOutput("Running...");
-
     try {
       // For now, we'll simulate code execution
       // Later we'll connect this to a real backend API
@@ -73,11 +66,9 @@ const CodeEditor = () => {
       setIsRunning(false);
     }
   };
-
   // Handle language change
   const handleLanguageChange = (selectedOption) => {
     setLanguage(selectedOption.value);
-
     // Set default code for each language
     const defaultCode = {
       javascript: '// JavaScript\nconsole.log("Hello, World!");',
@@ -98,7 +89,6 @@ const CodeEditor = () => {
       <div className="bg-zinc-950 p-4 ">
         <div className="container mx-auto flex items-center justify-between">
           <h1 className="text-3xl font-bold text-white">Code Editor</h1>
-
           <div className="flex items-center space-x-4">
             {/* Language Selector */}
             <div className="w-40">
