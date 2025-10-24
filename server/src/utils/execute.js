@@ -19,7 +19,9 @@ export const executeCode = (language, code) => {
     fs.writeFileSync(filePath, code);
 
     const command =
-      language === "javascript" ? `node ${filePath}` : `python3 ${filePath}`;
+      language === "javascript"
+        ? `node "${filePath}"`
+        : `python3 "${filePath}"`;
 
     exec(command, (error, stdout, stderr) => {
       fs.unlinkSync(filePath);
