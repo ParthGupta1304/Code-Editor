@@ -1,33 +1,68 @@
-import { exec } from "child_process";
-import fs from "fs";
-import path from "path";
-import { v4 as uuid } from "uuid";
+import { spawn } from "child_process";
 
-const __dirname = path.resolve();
-
+// Execute code without creating temp files. Streams the code to the interpreter via stdin.
 export const executeCode = (language, code) => {
   return new Promise((resolve, reject) => {
-    const jobId = uuid();
-    let filePath;
+    let proc;
+    const TIMEOUT_MS = 10000;
 
-    if (language === "javascript")
-      filePath = path.join(__dirname, `${jobId}.js`);
-    else if (language === "python")
-      filePath = path.join(__dirname, `${jobId}.py`);
-    else return reject("Unsupported language");
+    try {
+      if (language === "javascript") {
+        // Node supports reading script from stdin with '-'
+        proc = spawn("node", ["-"], {
+          stdio: ["pipe", "pipe", "pipe"],
+        });
+      } else if (language === "python") {
+        // Python reads script from stdin with '-'
+        proc = spawn("python3", ["-"], {
+          stdio: ["pipe", "pipe", "pipe"],
+        });
+      } else {
+        return reject(new Error(`Unsupported language: ${language}`));
+      }
 
-    fs.writeFileSync(filePath, code);
+      let stdout = "";
+      let stderr = "";
+      let finished = false;
 
-    const command =
-      language === "javascript"
-        ? `node "${filePath}"`
-        : `python3 "${filePath}"`;
+      // Timeout guard
+      const timer = setTimeout(() => {
+        if (finished) return;
+        finished = true;
+        try {
+          proc.kill("SIGKILL");
+        } catch {}
+        reject(new Error("Execution timed out"));
+      }, TIMEOUT_MS);
 
-    exec(command, (error, stdout, stderr) => {
-      fs.unlinkSync(filePath);
+      proc.stdout.on("data", (data) => {
+        stdout += data.toString();
+      });
+      proc.stderr.on("data", (data) => {
+        stderr += data.toString();
+      });
+      proc.on("error", (err) => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        reject(new Error(err.message));
+      });
+      proc.on("close", (codeExit) => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        if (codeExit === 0) {
+          resolve(stdout || "(No output)");
+        } else {
+          reject(new Error(stderr || `Process exited with code ${codeExit}`));
+        }
+      });
 
-      if (error) return reject(stderr || error.message);
-      resolve(stdout);
-    });
+      // Write the code to stdin and close
+      proc.stdin.write(code ?? "");
+      proc.stdin.end();
+    } catch (err) {
+      reject(new Error(err.message));
+    }
   });
 };
