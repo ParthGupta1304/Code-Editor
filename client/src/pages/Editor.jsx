@@ -17,8 +17,8 @@ const CodeEditor = () => {
   const languageOptions = [
     { value: "javascript", label: "JavaScript" },
     { value: "python", label: "Python" },
-    { value: "java", label: "Java" },
-    { value: "cpp", label: "C++" },
+    // { value: "java", label: "Java" },
+    // { value: "cpp", label: "C++" },
   ];
   // Theme options
   const themeOptions = [
@@ -47,22 +47,18 @@ const CodeEditor = () => {
     setIsRunning(true);
     setOutput("Running...");
     try {
-      // For now, we'll simulate code execution
-      // Later we'll connect this to a real backend API
-      setTimeout(() => {
-        if (language === "javascript") {
-          setOutput(
-            "// Simulated output:\n// Code executed successfully!\n// (Backend integration coming next)"
-          );
-        } else {
-          setOutput(
-            `// Simulated output for ${language}:\n// Code executed successfully!\n// (Backend integration coming next)`
-          );
-        }
-        setIsRunning(false);
-      }, 2000);
+      // Send code to backend API for execution
+      const response = await axios.post("http://localhost:3000/api/codes/run", {
+        language,
+        code,
+      });
+      // Display the actual output from backend
+      setOutput(response.data.output);
     } catch (error) {
-      setOutput(`Error: ${error.message}`);
+      // Show error message from backend or network error
+      const errorMessage = error.response?.data?.error || error.message;
+      setOutput(`❌ Error: ${errorMessage}`);
+    } finally {
       setIsRunning(false);
     }
   };
@@ -73,8 +69,8 @@ const CodeEditor = () => {
     const defaultCode = {
       javascript: '// JavaScript\nconsole.log("Hello, World!");',
       python: '# Python\nprint("Hello, World!")',
-      java: '// Java\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
-      cpp: '// C++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}',
+      //java: '// Java\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
+      //cpp: '// C++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}',
       // c: '// C\n#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}',
       // html: "<!-- HTML -->\n<!DOCTYPE html>\n<html>\n<head>\n    <title>Hello World</title>\n</head>\n<body>\n    <h1>Hello, World!</h1>\n</body>\n</html>",
       // css: "/* CSS */\nbody {\n    font-family: Arial, sans-serif;\n    background-color: #f0f0f0;\n    color: #333;\n}\n\nh1 {\n    color: #007bff;\n}",
