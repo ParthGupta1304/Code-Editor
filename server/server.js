@@ -9,27 +9,19 @@ import codeRoutes from "./src/routes/codeRoutes.js";
 const app = express();
 
 // Enable CORS
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://code-editor-pied-eta.vercel.app",
-  "https://code-editor-git-master-parthgupta1304s-projects.vercel.app",
-  process.env.CORS_ORIGIN,
-].filter(Boolean);
-
 const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-
-    if (
-      allowedOrigins.some(
-        (allowed) => origin.includes(allowed) || allowed.includes(origin)
-      )
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
+    
+    // Allow localhost for development
+    if (origin.includes("localhost")) return callback(null, true);
+    
+    // Allow all Vercel domains
+    if (origin.includes("vercel.app")) return callback(null, true);
+    
+    // Fallback - reject
+    callback(new Error("Not allowed by CORS"));
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
