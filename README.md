@@ -13,6 +13,7 @@ A modern online code editor supporting JavaScript and Python with real-time exec
 ## Tech Stack
 
 ### Frontend
+
 - React 19
 - Vite
 - Tailwind CSS v4
@@ -21,6 +22,7 @@ A modern online code editor supporting JavaScript and Python with real-time exec
 - Axios
 
 ### Backend
+
 - Node.js
 - Express
 - MongoDB with Mongoose
@@ -29,6 +31,7 @@ A modern online code editor supporting JavaScript and Python with real-time exec
 ## Local Development
 
 ### Prerequisites
+
 - Node.js 18+
 - MongoDB (local or Atlas)
 - Python 3 (for Python code execution)
@@ -36,12 +39,14 @@ A modern online code editor supporting JavaScript and Python with real-time exec
 ### Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/ParthGupta1304/Code-Editor.git
    cd Code-Editor
    ```
 
 2. **Setup Backend**
+
    ```bash
    cd server
    npm install
@@ -51,6 +56,7 @@ A modern online code editor supporting JavaScript and Python with real-time exec
    ```
 
 3. **Setup Frontend** (in new terminal)
+
    ```bash
    cd client
    npm install
@@ -64,6 +70,7 @@ A modern online code editor supporting JavaScript and Python with real-time exec
 ## Environment Variables
 
 ### Backend (.env)
+
 ```
 MONGODB_URI=mongodb://localhost:27017/code-editor
 PORT=3000
@@ -72,6 +79,7 @@ CORS_ORIGIN=http://localhost:5173
 ```
 
 ### Frontend (.env)
+
 ```
 VITE_API_URL=http://localhost:3000
 ```
@@ -81,6 +89,7 @@ VITE_API_URL=http://localhost:3000
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
 **Quick Deploy:**
+
 - Frontend: Deploy to Vercel
 - Backend: Deploy to Render or Railway
 - Database: MongoDB Atlas (free tier)
@@ -115,7 +124,9 @@ Code-Editor/
 ## API Endpoints
 
 ### POST /api/codes/run
+
 Execute code and save to database
+
 ```json
 {
   "language": "javascript",
@@ -124,6 +135,7 @@ Execute code and save to database
 ```
 
 Response:
+
 ```json
 {
   "output": "Hello World\n"
@@ -131,11 +143,13 @@ Response:
 ```
 
 ### GET /api/codes
+
 Retrieve all saved code snippets
 
 ## Security Notes
 
 ⚠️ **Important**: This application executes arbitrary code. For production:
+
 - Run backend in a sandboxed environment
 - Implement rate limiting
 - Add authentication

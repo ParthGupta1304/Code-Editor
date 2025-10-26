@@ -38,6 +38,7 @@ This guide covers deploying your Code Editor project to production.
 2. **Go to [Render](https://render.com)**
 
 3. **Create New Web Service**
+
    - Connect your GitHub repository
    - Root Directory: `server`
    - Environment: `Node`
@@ -45,12 +46,14 @@ This guide covers deploying your Code Editor project to production.
    - Start Command: `npm start`
 
 4. **Add Environment Variables:**
+
    ```
    MONGODB_URI=<your-mongodb-connection-string>
    NODE_ENV=production
    PORT=10000
    CORS_ORIGIN=<your-frontend-url>
    ```
+
    (You'll update CORS_ORIGIN after deploying frontend)
 
 5. **Deploy** - Copy your backend URL (e.g., `https://your-app.onrender.com`)
@@ -66,11 +69,13 @@ This guide covers deploying your Code Editor project to production.
 ### Option C: Deploy to Vercel
 
 1. **Install Vercel CLI:**
+
    ```bash
    npm install -g vercel
    ```
 
 2. **From server directory:**
+
    ```bash
    cd server
    vercel
@@ -89,27 +94,34 @@ This guide covers deploying your Code Editor project to production.
 ### Option A: Deploy to Vercel (Recommended)
 
 1. **Create `.env` file in client directory:**
+
    ```bash
    cd ../client
    cp .env.example .env
    ```
 
 2. **Edit `.env`:**
+
    ```
    VITE_API_URL=<your-backend-url>
    ```
+
    Example: `VITE_API_URL=https://your-app.onrender.com`
 
 3. **Install Vercel CLI** (if not already):
+
    ```bash
    npm install -g vercel
    ```
 
 4. **Deploy:**
+
    ```bash
    vercel
    ```
+
    Follow prompts, then:
+
    ```bash
    vercel --prod
    ```
@@ -125,26 +137,32 @@ This guide covers deploying your Code Editor project to production.
 ### Option B: Deploy to Netlify
 
 1. **Create `.env` file:**
+
    ```bash
    cd client
    cp .env.example .env
    ```
+
    Add: `VITE_API_URL=<your-backend-url>`
 
 2. **Install Netlify CLI:**
+
    ```bash
    npm install -g netlify-cli
    ```
 
 3. **Build locally:**
+
    ```bash
    npm run build
    ```
 
 4. **Deploy:**
+
    ```bash
    netlify deploy --prod
    ```
+
    Choose `dist` as publish directory
 
 5. **Or use Netlify Dashboard:**
@@ -179,20 +197,24 @@ After deploying frontend, update your backend CORS_ORIGIN:
 ## Troubleshooting
 
 ### CORS Errors
+
 - Ensure `CORS_ORIGIN` in backend matches your frontend URL exactly (no trailing slash)
 - Check browser console for exact error
 
 ### API Connection Failed
+
 - Verify `VITE_API_URL` is set correctly in frontend
 - Check backend logs for errors
 - Ensure MongoDB connection string is correct
 
 ### Code Execution Fails
+
 - Check if `node` and `python3` are available on your backend platform
 - Render and Railway support both by default
 - Vercel has limitations on code execution - use Render/Railway for backend
 
 ### Build Fails
+
 - Clear node_modules and reinstall: `rm -rf node_modules && npm install`
 - Check Node version compatibility (use Node 18+)
 
@@ -201,6 +223,7 @@ After deploying frontend, update your backend CORS_ORIGIN:
 ## Environment Variables Summary
 
 ### Backend (.env)
+
 ```
 MONGODB_URI=mongodb+srv://...
 NODE_ENV=production
@@ -209,6 +232,7 @@ CORS_ORIGIN=https://your-frontend-url.vercel.app
 ```
 
 ### Frontend (.env)
+
 ```
 VITE_API_URL=https://your-backend-url.onrender.com
 ```
@@ -241,6 +265,7 @@ VITE_API_URL=https://your-backend-url.onrender.com
 ## Recommended Setup
 
 For best results:
+
 - **Frontend**: Vercel (fast, free, great DX)
 - **Backend**: Render (free tier, supports code execution)
 - **Database**: MongoDB Atlas (free tier)
@@ -269,6 +294,7 @@ vercel --prod
 ## Support
 
 If you encounter issues:
+
 1. Check platform status pages
 2. Review deployment logs
 3. Verify all environment variables
