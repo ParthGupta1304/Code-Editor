@@ -25,8 +25,8 @@ const Navbar = () => {
     { to: "/editor", label: "Editor" },
     // { to: "/about", label: "About" },
     // { to: "/dashboard", label: "Dashboard" },
-    { to: "/login", label: "Login" },
-    { to: "/signup", label: "SignUp" },
+    // { to: "/login", label: "Login" },
+    // { to: "/signup", label: "SignUp" },
   ];
 
   return (
