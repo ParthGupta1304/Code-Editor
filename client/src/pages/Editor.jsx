@@ -53,8 +53,9 @@ const CodeEditor = () => {
       console.log("Sending request to backend...");
 
       // Send code to backend API
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
       const response = await axios.post(
-        "http://localhost:3000/api/codes/run",
+        `${API_URL}/api/codes/run`,
         {
           language,
           code,

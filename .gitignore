@@ -1,4 +1,10 @@
 node_modules/
 dist/
 .env
+.env.local
+.env.production
 INTERVIEW_QUESTIONS.md
+*.log
+.DS_Store
+.vercel
+.netlify
